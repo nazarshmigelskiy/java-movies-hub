@@ -109,11 +109,9 @@ class MoviesApiTest {
 
     @Test
     void postMovieShouldAddMovieWithCorrectData() throws IOException, InterruptedException {
-        HttpResponse<String> response = postMovie("""
-                {
-                  "title": "Начало",
-                  "year": 2010
-                }
+        HttpResponse<String> response = postMovie(
+                """
+                {"title": "Начало", "year": 2010}
                 """, CT_JSON);
         assertEquals(201, response.statusCode());
         Movie movie = gson.fromJson(response.body(), Movie.class);
@@ -127,7 +125,8 @@ class MoviesApiTest {
 
     @Test
     void postMovieShouldReturnErrorWhenTitleIsEmpty() throws IOException, InterruptedException {
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "",
                   "year": 2010
@@ -141,7 +140,8 @@ class MoviesApiTest {
     @Test
     void postMovieShouldReturnErrorWhenTitleIsTooLong() throws IOException, InterruptedException {
         String s = "a".repeat(101);
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "%s",
                   "year": 2010
@@ -153,7 +153,8 @@ class MoviesApiTest {
 
     @Test
     void postMovieShouldReturnErrorWhenYearIsLessThan1888() throws IOException, InterruptedException {
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "Начало",
                   "year": 1800
@@ -166,7 +167,8 @@ class MoviesApiTest {
     @Test
     void postMovieShouldReturnErrorWhenYearIsGreaterThanNextYear() throws IOException, InterruptedException {
         int invalidYear = LocalDate.now().getYear() + 2;
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "Начало",
                   "year": %d
@@ -178,7 +180,8 @@ class MoviesApiTest {
 
     @Test
     void postMovieShouldReturnErrorWhenContentTypeIsWrong() throws IOException, InterruptedException {
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "Начало",
                   "year": 2010
@@ -189,7 +192,8 @@ class MoviesApiTest {
 
     @Test
     void postMovieShouldReturnErrorWhenJsonIsInvalid() throws IOException, InterruptedException {
-        HttpResponse<String> response = postMovie("""
+        HttpResponse<String> response = postMovie(
+                """
                 {
                   "title": "Начало",
                   "year":
