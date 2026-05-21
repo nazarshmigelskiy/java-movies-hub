@@ -110,9 +110,10 @@ class MoviesApiTest {
     @Test
     void postMovieShouldAddMovieWithCorrectData() throws IOException, InterruptedException {
         HttpResponse<String> response = postMovie(
-                """
-                {"title": "Начало", "year": 2010}
-                """, CT_JSON);
+                "{\n" +
+                "  \"title\": \"Начало\",\n" +
+                "  \"year\": 2010\n" +
+                "}\n", CT_JSON);
         assertEquals(201, response.statusCode());
         Movie movie = gson.fromJson(response.body(), Movie.class);
         assertEquals("Начало", movie.getName());
@@ -126,12 +127,10 @@ class MoviesApiTest {
     @Test
     void postMovieShouldReturnErrorWhenTitleIsEmpty() throws IOException, InterruptedException {
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "",
-                  "year": 2010
-                }
-                """, CT_JSON);
+                "{\n" +
+                "  \"title\": \"\",\n" +
+                "  \"year\": 2010\n" +
+                "}\n", CT_JSON);
         assertEquals(422, response.statusCode());
         assertTrue(response.body().contains("Ошибка валидации"));
         assertTrue(response.body().contains("название не должно быть пустым"));
@@ -141,12 +140,10 @@ class MoviesApiTest {
     void postMovieShouldReturnErrorWhenTitleIsTooLong() throws IOException, InterruptedException {
         String s = "a".repeat(101);
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "%s",
-                  "year": 2010
-                }
-                """.formatted(s), CT_JSON);
+                ("{\n" +
+                 "  \"title\": \"%s\",\n" +
+                 "  \"year\": 2010\n" +
+                 "}\n").formatted(s), CT_JSON);
         assertEquals(422, response.statusCode());
         assertTrue(response.body().contains("Ошибка валидации"));
     }
@@ -154,12 +151,10 @@ class MoviesApiTest {
     @Test
     void postMovieShouldReturnErrorWhenYearIsLessThan1888() throws IOException, InterruptedException {
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "Начало",
-                  "year": 1800
-                }
-                """, CT_JSON);
+                "{\n" +
+                "  \"title\": \"Начало\",\n" +
+                "  \"year\": 1800\n" +
+                "}\n", CT_JSON);
         assertEquals(422, response.statusCode());
         assertTrue(response.body().contains("Ошибка валидации"));
     }
@@ -168,12 +163,10 @@ class MoviesApiTest {
     void postMovieShouldReturnErrorWhenYearIsGreaterThanNextYear() throws IOException, InterruptedException {
         int invalidYear = LocalDate.now().getYear() + 2;
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "Начало",
-                  "year": %d
-                }
-                """.formatted(invalidYear), CT_JSON);
+                ("{\n" +
+                 "  \"title\": \"Начало\",\n" +
+                 "  \"year\": %d\n" +
+                 "}\n").formatted(invalidYear), CT_JSON);
         assertEquals(422, response.statusCode());
         assertTrue(response.body().contains("Ошибка валидации"));
     }
@@ -181,24 +174,20 @@ class MoviesApiTest {
     @Test
     void postMovieShouldReturnErrorWhenContentTypeIsWrong() throws IOException, InterruptedException {
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "Начало",
-                  "year": 2010
-                }
-                """, "text/plain");
+                "{\n" +
+                "  \"title\": \"Начало\",\n" +
+                "  \"year\": 2010\n" +
+                "}\n", "text/plain");
         assertEquals(415, response.statusCode());
     }
 
     @Test
     void postMovieShouldReturnErrorWhenJsonIsInvalid() throws IOException, InterruptedException {
         HttpResponse<String> response = postMovie(
-                """
-                {
-                  "title": "Начало",
-                  "year":
-                }
-                """, CT_JSON);
+                "{\n" +
+                "  \"title\": \"Начало\",\n" +
+                "  \"year\":\n" +
+                "}\n", CT_JSON);
         assertEquals(400, response.statusCode());
     }
 
