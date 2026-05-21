@@ -73,8 +73,7 @@ public class MoviesHandler extends BaseHttpHandler {
 
     private void getHandleYear(HttpExchange ex) throws IOException {
         if (getYear(ex.getRequestURI().getQuery()).isEmpty()) {
-            String json = gson.toJson
-                    (new ErrorResponse("Некорректный параметр запроса — 'year'", new String[]{}));
+            String json = gson.toJson(new ErrorResponse("Некорректный параметр запроса — 'year'", new String[]{}));
             sendJson(ex, 400, json);
         } else {
             String json = gson.toJson(store.findMoviesByYear(getYear(ex.getRequestURI().getQuery()).get()));
@@ -83,8 +82,7 @@ public class MoviesHandler extends BaseHttpHandler {
     }
 
     private void postHandle(HttpExchange ex) throws IOException {
-        String contentType = ex.getRequestHeaders()
-                .getFirst("Content-Type");
+        String contentType = ex.getRequestHeaders().getFirst("Content-Type");
         if (contentType == null || !contentType.startsWith("application/json")) {
             sendNoContent(ex, 415);
             return;
