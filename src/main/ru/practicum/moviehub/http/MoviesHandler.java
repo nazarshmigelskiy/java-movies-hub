@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class MoviesHandler extends BaseHttpHandler {
     private final MoviesStore store;
-    private final Gson gson = new Gson();
+
 
     public MoviesHandler(MoviesStore store) {
         this.store = store;
